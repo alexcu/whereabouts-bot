@@ -1,14 +1,10 @@
 ###
-This index script loads all modules in the current directory into a key-value pair object that is exported.
+This module exports the client for communicating with Slack
 ###
+config      = require '../config'
+SlackClient = require 'slack-client'
 
-fs = require "fs"
-path = require "path"
-helpers = {}
+slack = new SlackClient config.botToken, config.autoReconnect
 
-fs.readdirSync __dirname
-  .filter (file) -> file isnt path.basename(__filename)
-  .map (file) -> path.basename(file, path.extname file)
-  .forEach (name) -> helpers[name] = require "./#{name}"
-
-module.exports = helpers
+# Export the slack bot
+module.exports = slack

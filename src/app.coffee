@@ -1,4 +1,4 @@
-slack           = (require './slack').client
+slack           = require './slack'
 whereaboutsbot  = require './whereaboutsbot'
 
 # Login to Slack
