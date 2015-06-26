@@ -20,4 +20,4 @@ Place a `config.json` under the `res` directory. Here is a sample config:
 ```
 
 - `botToken` Your auth token for the bot you have created on [Slack](https://ssil.slack.com/services/new/bot)
-- `listeningTo` The channels your bot listens to. Your bot should be invited to these channels by a human.
+- `listensTo` The channels your bot listens to. Your bot should be invited to these channels by a human.
