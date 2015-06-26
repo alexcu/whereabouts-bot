@@ -1,0 +1,25 @@
+{
+  "name": "whereabouts-bot",
+  "description": "A slack integration bot specifically designed for automating whereabouts of team members",
+  "author": "Alex Cummaudo",
+  "private": true,
+  "dependencies": {
+    "nconf": "0.7.1",
+    "coffee-script": "1.7.1",
+    "nedb" : "1.1.1",
+    "q" : "1.4.1",
+    "underscore": "1.7.0",
+    "slack-client": "1.4.1"
+  },
+  "devDependencies": {},
+  "engines": {
+    "node": "0.10.30"
+  },
+  "scripts": {
+    "start": "./node_modules/.bin/coffee ./src/app.coffee"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/alexcu-/whereabouts-bot.git"
+  }
+}
