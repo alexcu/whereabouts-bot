@@ -1,6 +1,4 @@
-{listensTo} = require '../config'
-slack       = require '../slack'
-
+slack         = require '../slack'
 HumanPrompter = require './human-prompter'
 
 ###
@@ -72,13 +70,4 @@ class WhereaboutsChannelParser
       console.log "User response:", response
 
 
-###
-Initialise listening to input
-###
-module.exports.initialise = ->
-  parsers = []
-  for channel in listensTo
-    parsers.push new WhereaboutsChannelParser channel
-  slack.on 'message', (message) ->
-    for parser in parsers
-      parser.onMessage message
+module.exports = WhereaboutsChannelParser
