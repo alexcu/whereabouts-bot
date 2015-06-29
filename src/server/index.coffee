@@ -23,7 +23,7 @@ app.get '/users/:state', (req, res) ->
 server = app.listen serverPort, ->
   host = server.address().address
   port = server.address().port
-  console.log 'Example app listening at http://%s:%s', host, port
+  console.log 'Listening at http://%s:%s', host, port
 
 module.exports =
   server: server
