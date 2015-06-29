@@ -5,6 +5,7 @@
   "private": true,
   "dependencies": {
     "coffee-script": "1.7.1",
+    "express": "^4.13.0",
     "moment": "^2.10.3",
     "nconf": "0.7.1",
     "q": "1.4.1",
