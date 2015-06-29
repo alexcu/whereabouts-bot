@@ -16,8 +16,13 @@ Place a `config.json` under the `res` directory. Here is a sample config:
     "vists",
     "events"
   ]
+  "botResponses" : [
+    "Go away",
+    "Hey!"
+  ]
 }
 ```
 
 - `botToken` Your auth token for the bot you have created on [Slack](https://ssil.slack.com/services/new/bot)
 - `listensTo` The channels your bot listens to. Your bot should be invited to these channels by a human.
+- `botResponses` Add customised bot responses to when a human talks to the bot.

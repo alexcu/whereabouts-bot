@@ -1,6 +1,7 @@
 slack                     = require './slack'
 WhereaboutsChannelParser  = require './classes/whereabouts-channel-parser'
 {listensTo}               = require './config'
+humanPrompter             = require './classes/human-prompter'
 
 # Login to Slack
 slack.login()

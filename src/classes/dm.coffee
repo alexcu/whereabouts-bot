@@ -18,7 +18,7 @@ class DM extends EventEmitter
     # Forward the message only if received from another user in this DM channel
     slack.on 'message', (message) =>
       # Grab the DM channel
-      if message.channel is @_dmChannel.id and message.user is userId
+      if message.getChannelType() is "DM" and message.user is userId
         @emit 'dmMessage', message
   ###
   Prompt a message in the DM

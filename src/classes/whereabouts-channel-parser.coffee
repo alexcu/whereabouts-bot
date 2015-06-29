@@ -40,14 +40,49 @@ class WhereaboutsChannelParser
     'day off':      @WhereaboutsStates.STAYING_HOME
 
   ###
+  Actions for DM responses
+  ###
+  @WhereaboutsPrompterForState: {}
+  yesNoResponse = /yes|y|yep|no|n|nup|nope/
+  sendThanks    = (userId) ->
+    HumanPrompter.message "Thanks for letting me know :smile:", userId
+  sendOkay      = (userId) ->
+    HumanPrompter.message "Okay, just checking :simple_smile:", userId
+  isAffirmative = (response) ->
+    response.charAt(0) is 'y'
+  # Running Late Action
+  @WhereaboutsPrompterForState[@WhereaboutsStates.RUNNING_LATE] =
+    responses:  yesNoResponse
+    question:   "Are you running late or coming in later today?"
+    actions:
+      affirmative: (userId) ->
+        console.log 'TODO: Set late status'
+        sendThanks(userId)
+      negative:    sendOkay
+  # Staying Home Action
+  @WhereaboutsPrompterForState[@WhereaboutsStates.STAYING_HOME] =
+    responses: yesNoResponse
+    question: "Are you staying home today?"
+    actions:
+      affirmative: (userId) ->
+        console.log 'Asking if home'
+        HumanPrompter.ask("Will you be working from home?", userId, yesNoResponse).then ((response) ->
+          isWorkingAtHome = isAffirmative response
+          console.log 'TODO: Set home[true] working[isWorkingAtHome]'
+          sendThanks(userId)
+        )
+      negative: sendOkay
+
+  ###
   Parses messages, returning the state for a matched keyword
   @param text Text to parse
   @returns The state of a matched keyword
   ###
   parseMessage: (text) =>
-    text = text.toLowerCase()
-    for keyword, state of WhereaboutsChannelParser.WhereaboutsKeywords
-      return state if text.indexOf(keyword) > -1
+    if text?
+      text = text.toLowerCase()
+      for keyword, state of WhereaboutsChannelParser.WhereaboutsKeywords
+        return state if text.indexOf(keyword) > -1
 
   ###
   Listening events for handling new messages
@@ -58,16 +93,11 @@ class WhereaboutsChannelParser
     unless state?
       return
     userId = message.user
-    responses = ['yes', 'y', 'no', 'no']
-    # Set up a state prompter
-    switch state
-      when WhereaboutsChannelParser.WhereaboutsStates.RUNNING_LATE
-        question = "Are you running late or coming in later today? [yes or no]"
-      when WhereaboutsChannelParser.WhereaboutsStates.STAYING_HOME
-        question = "Are you staying home today? [yes or no]"
-    prompter = new HumanPrompter userId, question, responses
-    prompter.on 'messageParsed', (response) ->
-      console.log "User response:", response
-
+    prompter = WhereaboutsChannelParser.WhereaboutsPrompterForState[state]
+    HumanPrompter.ask(prompter.question, userId, prompter.responses).then (
+      (response) ->
+        method = if isAffirmative response then 'affirmative' else 'negative'
+        prompter.actions[method](userId)
+    )
 
 module.exports = WhereaboutsChannelParser
