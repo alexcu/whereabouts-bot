@@ -14,9 +14,11 @@ class StateTracker
     )
   mark: (userId, state, extraInfo) =>
     @users[userId] =
-      user: slack.users[userId]
+      user: slack.users[userId].profile # just include the profile
       state: state
       info: extraInfo
+  usersForState: (state) =>
+    (user for id, user of @users when user.state is state)
 
 # Export singleton
 module.exports = new StateTracker
