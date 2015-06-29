@@ -1,5 +1,6 @@
 slack         = require '../slack'
 HumanPrompter = require './human-prompter'
+StateTracker  = require './state-tracker'
 
 ###
 This class parses text from the whereabouts channel
@@ -19,30 +20,34 @@ class WhereaboutsChannelParser
   @WhereaboutsStates:
     RUNNING_LATE: 'running_late'
     STAYING_HOME: 'staying_home'
+  # Alises
+  RUNNING_LATE =  WhereaboutsChannelParser.WhereaboutsStates.RUNNING_LATE
+  STAYING_HOME =  WhereaboutsChannelParser.WhereaboutsStates.STAYING_HOME
 
   ###
   Keywords detected for
   ###
   @WhereaboutsKeywords:
     # running late
-    'late':         @WhereaboutsStates.RUNNING_LATE
-    'later':        @WhereaboutsStates.RUNNING_LATE
-    'a while':      @WhereaboutsStates.RUNNING_LATE
-    'soon':         @WhereaboutsStates.RUNNING_LATE
+    'late':         RUNNING_LATE
+    'later':        RUNNING_LATE
+    'a while':      RUNNING_LATE
+    'soon':         RUNNING_LATE
     # staying home
-    'home':         @WhereaboutsStates.STAYING_HOME
-    'not feeling':  @WhereaboutsStates.STAYING_HOME
-    'won\'t be in': @WhereaboutsStates.STAYING_HOME
-    'unwell':       @WhereaboutsStates.STAYING_HOME
-    'coming in':    @WhereaboutsStates.STAYING_HOME
-    'in lieu':      @WhereaboutsStates.STAYING_HOME
-    'leave':        @WhereaboutsStates.STAYING_HOME
-    'day off':      @WhereaboutsStates.STAYING_HOME
+    'home':         STAYING_HOME
+    'not feeling':  STAYING_HOME
+    'won\'t be in': STAYING_HOME
+    'unwell':       STAYING_HOME
+    'coming in':    STAYING_HOME
+    'in lieu':      STAYING_HOME
+    'leave':        STAYING_HOME
+    'day off':      STAYING_HOME
 
   ###
   Actions for DM responses
   ###
   @WhereaboutsPrompterForState: {}
+
   yesNoResponse = /yes|y|yep|no|n|nup|nope/
   sendThanks    = (userId) ->
     HumanPrompter.message "Thanks for letting me know :smile:", userId
@@ -51,25 +56,25 @@ class WhereaboutsChannelParser
   isAffirmative = (response) ->
     response.charAt(0) is 'y'
   # Running Late Action
-  @WhereaboutsPrompterForState[@WhereaboutsStates.RUNNING_LATE] =
+  @WhereaboutsPrompterForState[RUNNING_LATE] =
     responses:  yesNoResponse
     question:   "Are you running late or coming in later today?"
     actions:
       affirmative: (userId) ->
-        console.log 'TODO: Set late status'
+        StateTracker.mark userId, RUNNING_LATE
         sendThanks(userId)
       negative:    sendOkay
   # Staying Home Action
-  @WhereaboutsPrompterForState[@WhereaboutsStates.STAYING_HOME] =
+  @WhereaboutsPrompterForState[STAYING_HOME] =
     responses: yesNoResponse
     question: "Are you staying home today?"
     actions:
       affirmative: (userId) ->
-        console.log 'Asking if home'
-        HumanPrompter.ask("Will you be working from home?", userId, yesNoResponse).then ((response) ->
-          isWorkingAtHome = isAffirmative response
-          console.log 'TODO: Set home[true] working[isWorkingAtHome]'
-          sendThanks(userId)
+        HumanPrompter.ask("Will you be working from home?", userId, yesNoResponse).then (
+          (response) ->
+            isWorkingAtHome = isAffirmative response
+            StateTracker.mark userId, STAYING_HOME, (if isWorkingAtHome then 'working_at_home' else undefined)
+            sendThanks(userId)
         )
       negative: sendOkay
 
