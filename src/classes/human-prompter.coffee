@@ -17,7 +17,9 @@ class HumanPrompter
     formattedListensTo = []
     for id, channel of slack.channels when channel.name in listensTo
         formattedListensTo.push "<##{channel.id}|#{channel.name}>"
-    "Hi! I'm #{slack.self.name}. Post in #{formattedListensTo.join ' or '} to inform the team of your whereabouts if you are late or at home and I'll confirm it with you. You can also bypass me (:cry:) by using the `/whereabouts [state]` slash command."
+    "Hi! I'm #{slack.self.name}. Post in #{formattedListensTo.join ' or '} to inform the team of your whereabouts if you are late, sick, home or off-site and I'll confirm it with you.
+
+    You can also bypass me (:cry:) by using the `/whereabouts [state]` slash command and set your own whereabouts by yourself."
 
   ###
   Responses to pick when talking to whereabouts bot without it asking human a question
@@ -39,7 +41,7 @@ class HumanPrompter
       # Create a new user if a new user starts talking to me
       hasSetup = (@_setupUser message.user if isDM)
       if hasSetup
-        pingHelp message.user
+        @pingHelp message.user
 
   ###
   Sets up a prompter for a user
@@ -87,7 +89,6 @@ class HumanPrompter
     @_setupUser userId
     @_sendMessage messageText, userId
 
-
   ###
   Sends a message to the user from the bot
   @param  messageText [string]  text to send
@@ -111,7 +112,7 @@ class HumanPrompter
   Pings the user with the help text
   @param userId [string] The user to ping
   ###
-  pingHelp: (userId) ->
+  pingHelp: (userId) =>
     @_sendMessage @_helpMessage(), userId
 
   ###
@@ -122,7 +123,7 @@ class HumanPrompter
   _parseMessage: (message, userId) =>
     return if message.user isnt userId
     messageText = message.text.toLowerCase()
-    return pingHelp userId if messageText is 'help'
+    return @pingHelp userId if messageText is 'help'
     questionObj = @users[userId].lastQuestion
     # talking to bot without a question asked?
     unless questionObj?
