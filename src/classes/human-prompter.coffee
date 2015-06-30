@@ -39,7 +39,7 @@ class HumanPrompter
       # Create a new user if a new user starts talking to me
       hasSetup = (@_setupUser message.user if isDM)
       if hasSetup
-        @_sendMessage @_helpMessage(), message.user
+        pingHelp message.user
 
   ###
   Sets up a prompter for a user
@@ -108,19 +108,25 @@ class HumanPrompter
     @users[userId].lastQuestion = undefined
 
   ###
+  Pings the user with the help text
+  @param userId [string] The user to ping
+  ###
+  pingHelp: (userId) ->
+    @_sendMessage @_helpMessage(), userId
+
+  ###
   Parse a message for a suitable human response
   @param message [object] The message to check
   @param userId [string] Who to parse from
   ###
   _parseMessage: (message, userId) =>
     return if message.user isnt userId
-    if message.text is 'help'
-      return @_sendMessage @_helpMessage(), userId
+    messageText = message.text.toLowerCase()
+    return pingHelp userId if messageText is 'help'
     questionObj = @users[userId].lastQuestion
     # talking to bot without a question asked?
     unless questionObj?
       return @_sendMessage _.sample(HumanPrompter.responses), userId
-    messageText = message.text.toLowerCase()
     matches = questionObj.expectedResponses.exec messageText
     if matches? and matches.length > 0
       # resolve the promise with the first match

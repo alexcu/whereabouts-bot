@@ -5,6 +5,7 @@ app                = express()
 slack              = require '../slack'
 bodyParser         = require 'body-parser'
 StateTracker       = require '../classes/state-tracker'
+HumanPrompter      = require '../classes/human-prompter'
 WhereaboutsStates  = require '../classes/whereabouts-states'
 
 ###
@@ -37,10 +38,12 @@ app.post '/states/', (req, res) ->
   unless slack.users[userId]?
     return res.status(400).send("No such user with id #{userId}")
   param  = req.body.text
-  ACCEPTED_PARAMS = ['home', 'sick', 'late', 'clear']
+  ACCEPTED_PARAMS = ['home', 'sick', 'late', 'clear', 'help']
   unless param in ACCEPTED_PARAMS
     return res.status(400).send("Unacceptable parameter. Set to one of #{ACCEPTED_PARAMS.join ', '}")
   switch param
+    when 'help'
+      HumanPrompter.pingHelp userId
     when 'home'
       StateTracker.mark userId, WORKING_AT_HOME
     when 'sick'
