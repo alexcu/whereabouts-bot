@@ -125,7 +125,8 @@ class HumanPrompter
     if matches? and matches.length > 0
       # resolve the promise with the first match
       @users[userId].lastQuestion.deferred.resolve(matches[0])
-      # remove this question asked
+      # remove this question asked and clear the timeout
+      clearTimeout @users[userId].lastQuestion.timeout
       @users[userId].lastQuestion = undefined
     else
       # unexpected response
