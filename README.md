@@ -5,7 +5,7 @@ Whereaboutsbot is a [Slack](http://slack.com) bot for responding to team members
 
 Whereaboutsbot also runs a Node.js sever, with a basic API to fetch and post user's states.
 
-In addition, whereaboutsbot can also be configured as a Slack [slash command](https://api.slack.com/slash-commands) by hooking into the `POST `/state/` endpoint.
+In addition, whereaboutsbot can also be configured as a Slack [slash command](https://api.slack.com/slash-commands) by hooking into the `POST /state/` endpoint.
 
 ## Usage
 
