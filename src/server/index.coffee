@@ -31,7 +31,7 @@ POST /state/
 Update a state for a user
 ###
 app.post '/states/', (req, res) ->
-  unless req.body.token isnt postToken
+  unless req.body.token isnt authToken
     return res.status(400).send("Invalid auth token provided")
   userId = req.body.user_id
   unless slack.users[userId]?
