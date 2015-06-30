@@ -9,7 +9,7 @@ In addition, whereaboutsbot can also be configured as a Slack [slash command](ht
 
 ## Usage
 
-Whereabouts bot will listen for key words such as "sick", "home", "late" and so on in the channel(s) it is told to listen to. When slash commands are enabled, the parameter usage is `/whereabouts [state]`, where `state` is one of `sick`, `home`, `late` or `clear`.
+Whereabouts bot will listen for key words such as "sick", "home", "late" and so on in the channel(s) it is told to listen to. When slash commands are enabled, the parameter usage is `/whereabouts [state]`, where `state` is one of `sick`, `home`, `late`, `offsite`, `help`, or `clear`.
 
 Use the `GET /state/` endpoint of retrieve the latest states of team members. Use the information from this endpoint on a dashboard (e.g. [Dashing](http://dashing.io)), informing your team of who is in, who is sick and who is running late.
 

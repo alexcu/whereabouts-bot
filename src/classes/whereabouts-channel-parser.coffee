@@ -21,6 +21,7 @@ class WhereaboutsChannelParser
   RUNNING_LATE    = WhereaboutsStates.RUNNING_LATE
   STAYING_HOME    = WhereaboutsStates.STAYING_HOME
   WORKING_AT_HOME = WhereaboutsStates.WORKING_AT_HOME
+  OFFSITE         = WhereaboutsStates.OFFSITE
 
   ###
   Keywords detected for
@@ -41,6 +42,10 @@ class WhereaboutsChannelParser
     'in lieu':      STAYING_HOME
     'leave':        STAYING_HOME
     'day off':      STAYING_HOME
+    # offsite
+    'offsite':      OFFSITE
+    'off site':     OFFSITE
+    'off-site':     OFFSITE
 
   ###
   Actions for DM responses
@@ -76,6 +81,15 @@ class WhereaboutsChannelParser
             sendThanks(userId)
         )
       negative: sendOkay
+  # Off site
+  @WhereaboutsPrompterForState[OFFSITE] =
+    responses: yesNoResponse
+    question: "Are you working off-site today?"
+    actions:
+      affirmative: (userId) ->
+        StateTracker.mark userId, OFFSITE
+        sendThanks(userId)
+      negative:    sendOkay
 
   ###
   Parses messages, returning the state for a matched keyword

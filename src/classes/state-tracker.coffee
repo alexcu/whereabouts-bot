@@ -3,13 +3,6 @@ slack              = require '../slack'
 WhereaboutsStates  = require './whereabouts-states'
 
 ###
-The variant states for outstanding whereabouts
-###
-RUNNING_LATE    = WhereaboutsStates.RUNNING_LATE
-STAYING_HOME    = WhereaboutsStates.STAYING_HOME
-WORKING_AT_HOME = WhereaboutsStates.WORKING_AT_HOME
-
-###
 This class tracks the state of users
 ###
 class StateTracker
