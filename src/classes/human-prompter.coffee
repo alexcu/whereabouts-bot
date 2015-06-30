@@ -113,7 +113,7 @@ class HumanPrompter
   @param userId [string] The user to ping
   ###
   pingHelp: (userId) =>
-    @_sendMessage @_helpMessage(), userId
+    @message @_helpMessage(), userId
 
   ###
   Parse a message for a suitable human response
