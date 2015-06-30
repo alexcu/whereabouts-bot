@@ -20,9 +20,11 @@ class WhereaboutsChannelParser
   @WhereaboutsStates:
     RUNNING_LATE: 'running_late'
     STAYING_HOME: 'staying_home'
+    WORKING_AT_HOME: 'working_at_home'
   # Alises
   RUNNING_LATE =  WhereaboutsChannelParser.WhereaboutsStates.RUNNING_LATE
   STAYING_HOME =  WhereaboutsChannelParser.WhereaboutsStates.STAYING_HOME
+  WORKING_AT_HOME = WhereaboutsChannelParser.WhereaboutsStates.WORKING_AT_HOME
 
   ###
   Keywords detected for
@@ -73,7 +75,7 @@ class WhereaboutsChannelParser
         HumanPrompter.ask("Will you be working from home?", userId, yesNoResponse).then (
           (response) ->
             isWorkingAtHome = isAffirmative response
-            StateTracker.mark userId, STAYING_HOME, (if isWorkingAtHome then 'working_at_home' else undefined)
+            StateTracker.mark userId, STAYING_HOME, (if isWorkingAtHome then WORKING_AT_HOME else undefined)
             sendThanks(userId)
         )
       negative: sendOkay
