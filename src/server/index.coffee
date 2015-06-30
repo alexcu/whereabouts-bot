@@ -13,7 +13,7 @@ RUNNING_LATE    = WhereaboutsStates.RUNNING_LATE
 STAYING_HOME    = WhereaboutsStates.STAYING_HOME
 WORKING_AT_HOME = WhereaboutsStates.WORKING_AT_HOME
 
-app.use bodyParser.json()
+app.use bodyParser.urlencoded { extended: true }
 
 ###
 GET /states/
@@ -30,6 +30,7 @@ POST /state/
 Update a state for a user
 ###
 app.post '/states/', (req, res) ->
+  conso
   userId = req.body.user_id
   unless slack.users[userId]?
     return res.status(400).send("No such user with id #{userId}")
