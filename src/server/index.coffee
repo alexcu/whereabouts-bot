@@ -1,4 +1,5 @@
 {serverPort}       = require '../config'
+{authToken}        = require '../config'
 express            = require 'express'
 app                = express()
 slack              = require '../slack'
@@ -30,6 +31,8 @@ POST /state/
 Update a state for a user
 ###
 app.post '/states/', (req, res) ->
+  unless req.body.token isnt postToken
+    return res.status(400).send("Invalid auth token provided")
   userId = req.body.user_id
   unless slack.users[userId]?
     return res.status(400).send("No such user with id #{userId}")
