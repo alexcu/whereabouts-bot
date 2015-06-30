@@ -1,11 +1,13 @@
-moment                    = require 'moment'
-slack                     = require '../slack'
-WhereaboutsChannelParser  = require '../classes/whereabouts-channel-parser'
+moment             = require 'moment'
+slack              = require '../slack'
+WhereaboutsStates  = require './whereabouts-states'
 
-# Alises
-RUNNING_LATE =  WhereaboutsChannelParser.WhereaboutsStates.RUNNING_LATE
-STAYING_HOME =  WhereaboutsChannelParser.WhereaboutsStates.STAYING_HOME
-WORKING_AT_HOME = WhereaboutsChannelParser.WhereaboutsStates.WORKING_AT_HOME
+###
+The variant states for outstanding whereabouts
+###
+RUNNING_LATE    = WhereaboutsStates.RUNNING_LATE
+STAYING_HOME    = WhereaboutsStates.STAYING_HOME
+WORKING_AT_HOME = WhereaboutsStates.WORKING_AT_HOME
 
 ###
 This class tracks the state of users
@@ -20,23 +22,22 @@ class StateTracker
     )
   ###
   Mark a user's state
-  @param  userId  [string]  The user to mark
-  @param  state   [string]  The state to set as (one of STAYING_HOME or RUNNING_LATE)
-  @param  extraInfo [string]  Include WORKING_AT_HOME here if STAYING_HOME and working
+  @param  userId  [string]            The user to mark
+  @param  state   [WhereaboutsState]  The state to set as
   ###
-  mark: (userId, state, extraInfo) =>
-    unless state in [RUNNING_LATE, STAYING_HOME] or (extraInfo? and extraInfo isnt WORKING_AT_HOME)
-      throw Error "Invalid state provided for marking #{state} (extraInfo=#{extraInfo})"
+  mark: (userId, state) =>
+    unless state.toUpperCase() in Object.keys WhereaboutsStates
+      throw Error "Invalid state provided for marking #{state}"
     @users[userId] =
       user: slack.users[userId].profile # just include the profile
       state: state
-      info: extraInfo
   ###
   Clear a user's state
   @param  userId  [string]  The user to clear
   ###
   clear: (userId) =>
-    delete @users[userId]
+    if @users[userId]?
+      delete @users[userId]
   ###
   Retrieves all users whose state match the state provided
   @param state  [string]  The state to check

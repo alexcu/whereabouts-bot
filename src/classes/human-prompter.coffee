@@ -17,7 +17,7 @@ class HumanPrompter
     formattedListensTo = []
     for id, channel of slack.channels when channel.name in listensTo
         formattedListensTo.push "<##{channel.id}|#{channel.name}>"
-    "Hi! I'm #{slack.self.name}. Post in #{formattedListensTo.join ' or '} to inform the team of your whereabouts if you are late or at home and I'll confirm it with you. Have a good day!"
+    "Hi! I'm #{slack.self.name}. Post in #{formattedListensTo.join ' or '} to inform the team of your whereabouts if you are late or at home and I'll confirm it with you. You can also bypass me (:cry:) by using the `/whereabouts [state]` slash command."
 
   ###
   Responses to pick when talking to whereabouts bot without it asking human a question

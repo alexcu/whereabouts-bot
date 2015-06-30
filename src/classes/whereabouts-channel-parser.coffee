@@ -1,6 +1,7 @@
-slack         = require '../slack'
-HumanPrompter = require './human-prompter'
-StateTracker  = require './state-tracker'
+slack             = require '../slack'
+WhereaboutsStates = require './whereabouts-states'
+HumanPrompter     = require './human-prompter'
+StateTracker      = require './state-tracker'
 
 ###
 This class parses text from the whereabouts channel
@@ -17,14 +18,9 @@ class WhereaboutsChannelParser
   ###
   The variant states for outstanding whereabouts
   ###
-  @WhereaboutsStates:
-    RUNNING_LATE: 'running_late'
-    STAYING_HOME: 'staying_home'
-    WORKING_AT_HOME: 'working_at_home'
-  # Alises
-  RUNNING_LATE =  WhereaboutsChannelParser.WhereaboutsStates.RUNNING_LATE
-  STAYING_HOME =  WhereaboutsChannelParser.WhereaboutsStates.STAYING_HOME
-  WORKING_AT_HOME = WhereaboutsChannelParser.WhereaboutsStates.WORKING_AT_HOME
+  RUNNING_LATE    = WhereaboutsStates.RUNNING_LATE
+  STAYING_HOME    = WhereaboutsStates.STAYING_HOME
+  WORKING_AT_HOME = WhereaboutsStates.WORKING_AT_HOME
 
   ###
   Keywords detected for
@@ -39,6 +35,7 @@ class WhereaboutsChannelParser
     'home':         STAYING_HOME
     'not feeling':  STAYING_HOME
     'won\'t be in': STAYING_HOME
+    'sick':         STAYING_HOME
     'unwell':       STAYING_HOME
     'coming in':    STAYING_HOME
     'in lieu':      STAYING_HOME
@@ -60,7 +57,7 @@ class WhereaboutsChannelParser
   # Running Late Action
   @WhereaboutsPrompterForState[RUNNING_LATE] =
     responses:  yesNoResponse
-    question:   "Are you running late or coming in later today?"
+    question:   "Will you be in late today?"
     actions:
       affirmative: (userId) ->
         StateTracker.mark userId, RUNNING_LATE
@@ -75,7 +72,7 @@ class WhereaboutsChannelParser
         HumanPrompter.ask("Will you be working from home?", userId, yesNoResponse).then (
           (response) ->
             isWorkingAtHome = isAffirmative response
-            StateTracker.mark userId, STAYING_HOME, (if isWorkingAtHome then WORKING_AT_HOME else undefined)
+            StateTracker.mark userId, if isWorkingAtHome then WORKING_AT_HOME else STAYING_HOME
             sendThanks(userId)
         )
       negative: sendOkay
