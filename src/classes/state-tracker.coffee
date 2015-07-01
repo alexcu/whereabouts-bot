@@ -8,11 +8,11 @@ This class tracks the state of users
 class StateTracker
   constructor: ->
     @users = {}
+    resetCheck = =>
+      isMidnight = moment().format("h:mm:ss") == "0:00:00"
+      @users = {} if isMidnight
     # reset the user states at midnight
-    setTimeout(
-       (-> @user = {}),
-       moment("24:00:00", "hh:mm:ss").diff(moment(), 'seconds')
-    )
+    setInterval(resetCheck, 1000)
   ###
   Mark a user's state
   @param  userId  [string]            The user to mark
