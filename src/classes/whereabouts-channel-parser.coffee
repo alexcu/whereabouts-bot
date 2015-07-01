@@ -22,6 +22,7 @@ class WhereaboutsChannelParser
   STAYING_HOME    = WhereaboutsStates.STAYING_HOME
   WORKING_AT_HOME = WhereaboutsStates.WORKING_AT_HOME
   OFFSITE         = WhereaboutsStates.OFFSITE
+  OUT_OF_OFFICE   = WhereaboutsStates.OUT_OF_OFFICE
 
   ###
   Keywords detected for
@@ -42,10 +43,14 @@ class WhereaboutsChannelParser
     'in lieu':      STAYING_HOME
     'leave':        STAYING_HOME
     'day off':      STAYING_HOME
+    'away':         STAYING_HOME
     # offsite
     'offsite':      OFFSITE
     'off site':     OFFSITE
     'off-site':     OFFSITE
+    # out
+    'heading out':  OUT_OF_OFFICE
+    'out':          OUT_OF_OFFICE
 
   ###
   Actions for DM responses
@@ -88,6 +93,15 @@ class WhereaboutsChannelParser
     actions:
       affirmative: (userId) ->
         StateTracker.mark userId, OFFSITE
+        sendThanks(userId)
+      negative:    sendOkay
+  # Out
+  @WhereaboutsPrompterForState[OUT_OF_OFFICE] =
+    responses: yesNoResponse
+    question: "Are you heading out of the office for a bit?"
+    actions:
+      affirmative: (userId) ->
+        StateTracker.mark userId, OUT_OF_OFFICE
         sendThanks(userId)
       negative:    sendOkay
 
