@@ -5,11 +5,19 @@ Whereaboutsbot is a [Slack](http://slack.com) bot for responding to team members
 
 Whereaboutsbot also runs a Node.js sever, with a basic API to fetch and post user's states.
 
+The following whereabouts states are supported:
+
+- _sick_, for when a team member is sick and not working,
+- _home_, for when a team member is working from home,
+- _late_, for when a team member is running late,
+- _offsite_, for when a team member is working off-site, such as at another office, and
+- _out_, for when a team member is currently out of the office, but will be coming back.
+
 In addition, whereaboutsbot can also be configured as a Slack [slash command](https://api.slack.com/slash-commands) by hooking into the `POST /state/` endpoint.
 
 ## Usage
 
-Whereabouts bot will listen for key words such as "sick", "home", "late" and so on in the channel(s) it is told to listen to. When slash commands are enabled, the parameter usage is `/whereabouts [state]`, where `state` is one of `sick`, `home`, `late`, `offsite`, `help`, or `clear`.
+Whereabouts bot will listen for key words such as "sick", "home", "late" and so on in the channel(s) it is told to listen to. When slash commands are enabled, the parameter usage is `/whereabouts [state]`, where `state` is one of `sick`, `home`, `late`, `offsite`, `out`, `help`, or `clear`.
 
 Use the `GET /state/` endpoint of retrieve the latest states of team members. Use the information from this endpoint on a dashboard (e.g. [Dashing](http://dashing.io)), informing your team of who is in, who is sick and who is running late.
 
@@ -40,12 +48,14 @@ Place a `config.json` under the `res` directory. Here is a sample config:
     "Hey!"
   ],
   "serverPort": 3000,
-  "authToken": "xxxxxxxx"
+  "authToken": "xxxxxxxx",
+  "expireTime": "00 00 * * *"
 }
 ```
 
-- `botToken` Your auth token for the bot you have created on [Slack](https://ssil.slack.com/services/new/bot)
+- `botToken` Your auth token for the bot you have created on [Slack](https://ssil.slack.com/services/new/bot).
 - `listensTo` The channels your bot listens to. Your bot should be invited to these channels by a human.
 - `botResponses` Add customised bot responses to when a human talks to the bot.
 - `serverPort` The port to run the server on.
 - `authToken` An auth token to use for POST requests to the whereabouts bot to update state manually. This should be the same token acquired from the slash command integration (should you create one).
+- `expireTime` An _optional_ [cron-formatted](https://en.wikipedia.org/wiki/Cron#Configuration_file) time format as for when people's whereabouts expire, for example at midnight (as per the example time above) to signal the start of a new day, and thus a new state for people to add their whereabouts. If left blank, then people's whereabouts will not automatically expire, and must be manually cleared using the slack command `/whereabouts clear`.

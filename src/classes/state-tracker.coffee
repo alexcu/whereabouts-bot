@@ -1,18 +1,22 @@
-moment             = require 'moment'
 slack              = require '../slack'
 WhereaboutsStates  = require './whereabouts-states'
-
+{CronJob}          = require 'cron'
+{expireTime}       = require '../config'
 ###
 This class tracks the state of users
 ###
 class StateTracker
   constructor: ->
     @users = {}
-    resetCheck = =>
-      isMidnight = moment().format("h:mm:ss") == "0:00:00"
-      @users = {} if isMidnight
-    # reset the user states at midnight
-    setInterval(resetCheck, 1000)
+    if expireTime?
+      console.log "Setting up expire to 00 #{expireTime}"
+      try
+        job = new CronJob '00 ' + expireTime, =>
+          @users = {}
+        job.start()
+      catch e
+        throw Error "Invalid cron time for `expireTime`"
+
   ###
   Mark a user's state
   @param  userId  [string]            The user to mark
