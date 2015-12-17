@@ -13,6 +13,7 @@ class WhereaboutsChannelParser
   constructor: (listeningTo) ->
     @channel = (channel for id, channel of slack.channels when channel.name is listeningTo and channel.is_member)[0]
     unless @channel?
+      # TODO: Add bot to channel automatically?
       throw Error "#{slack.self.name} is not a member of #{listeningTo} or #{listeningTo} could not be found"
 
   ###

@@ -37,7 +37,7 @@ Place a `config.json` under the `res` directory. Here is a sample config:
 
 ```
 {
-  "botToken"  : "xoxb-xxxxxxx-xxxxxxxxxxxx",
+  "botToken"  : "xoxb-XXXXXXXXXXXX-TTTTTTTTTTTTTT",
   "listensTo" : [
     "whereabouts",
     "vists",
@@ -59,3 +59,43 @@ Place a `config.json` under the `res` directory. Here is a sample config:
 - `serverPort` The port to run the server on.
 - `authToken` An auth token to use for POST requests to the whereabouts bot to update state manually. This should be the same token acquired from the slash command integration (should you create one).
 - `expireTime` An _optional_ [cron-formatted](https://en.wikipedia.org/wiki/Cron#Configuration_file) time format as for when people's whereabouts expire, for example at midnight (as per the example time above) to signal the start of a new day, and thus a new state for people to add their whereabouts. If left blank, then people's whereabouts will not automatically expire, and must be manually cleared using the slack command `/whereabouts clear`.
+
+## TODO
+
+- Add a contributing section to the README
+- Use `throw new Error` instead of `throw Error` and try and specify the error type
+- Allow bot to be DM'ed and ask questions and give statements like:
+  - Who is working from home today?
+  - Who is sick?
+  - Who is out of office?
+  - Where is @alex?
+  - I'm staying home today
+- Add timing to bot to change state of a user at a given time
+  - I'll be out of office at 5pm
+  - I'm going home at 4pm
+  - I'll be leaving early for an appointment this afternoon
+- Let the bot introduce himself to new users?
+- If the bot is not in a channel, let it try and add itself to that channel rather than crashing
+- Better API
+- Switch to using Redis for keeping track of states instead of just in memory
+- RSS feeds of people's states
+- Improve the way to handle config files, e.g.:
+  - Default to use arguments:
+    - `--slack-token` for the Slack bot token
+    - `--port` for the port to run the server on
+    - `--expire-time` for the expiry time
+    - `--auth-token` for the auth token to post states
+    - `--listen-to` comma-separated list of channels to listen to
+  - Second default to use environment variables:
+    - `WHEREABOUTS_BOT_SLACK_TOKEN`
+    - `WHEREABOUTS_BOT_PORT`
+    - `WHEREABOUTS_BOT_EXPIRE_TIME`
+    - `WHEREABOUTS_BOT_AUTH_TOKEN`
+    - `WHEREABOUTS_BOT_LISTEN_TO`
+  - Finally provide the option to read from a specific config file, else default to root folder (not from `res`)
+    - `--config-file` or
+    - `WHEREABOUTS_BOT_CONFIG_FILE`
+  - Or better still, have no config file... we don't want to store the auth tokens anywhere
+- Better `auth-token` handling?
+- Add slash commands out-of-the-box
+- Wrap it up into a [Slack app](https://slack.com/apps)?
