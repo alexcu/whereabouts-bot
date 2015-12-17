@@ -12,7 +12,7 @@ class DM extends EventEmitter
   constructor: (userId) ->
     @user = slack.users[userId]
     unless @user?
-      throw Error "That can't happen - user id #{userId} not found!"
+      throw new Error "That can't happen - user id #{userId} not found!"
     # Load the DM channel from slack DMs if there
     @_dmChannel = (dm for id, dm of slack.dms when dm.user is @user.id)[0]
     # Forward the message only if received from another user in this DM channel

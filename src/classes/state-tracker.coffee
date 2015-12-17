@@ -21,13 +21,15 @@ class StateTracker
   Mark a user's state
   @param  userId  [string]            The user to mark
   @param  state   [WhereaboutsState]  The state to set as
+  @returns [Boolean] Whether or not the state was set
   ###
   mark: (userId, state) =>
     unless state.toUpperCase() in Object.keys WhereaboutsStates
-      throw Error "Invalid state provided for marking #{state}"
+      return false
     @users[userId] =
       user: slack.users[userId].profile # just include the profile
       state: state
+    true
   ###
   Clear a user's state
   @param  userId  [string]  The user to clear
