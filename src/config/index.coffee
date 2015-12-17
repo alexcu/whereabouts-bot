@@ -41,7 +41,7 @@ expectedConfig =
 # Just getting help?
 if argv.help or argv.h
   for _, confVar of expectedConfig
-    console.log '  --', (pad confVar.argv, 20), confVar.describe
+    console.log "  --#{pad confVar.argv, 20}", confVar.describe
   process.exit 0
 else
   for confKey, confVar of expectedConfig
