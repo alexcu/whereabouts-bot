@@ -2,10 +2,14 @@ slack              = require '../slack'
 WhereaboutsStates  = require './whereabouts-states'
 {CronJob}          = require 'cron'
 {expireTime}       = require '../config'
-###
-This class tracks the state of users
+
+###*
+ * This class tracks the states of users
 ###
 class StateTracker
+  ###*
+   * Constructs a new StateTracker
+  ###
   constructor: ->
     @users = {}
     if expireTime?
@@ -17,11 +21,11 @@ class StateTracker
       catch e
         throw Error "Invalid cron time for `expireTime`"
 
-  ###
-  Mark a user's state
-  @param  userId  [string]            The user to mark
-  @param  state   [WhereaboutsState]  The state to set as
-  @returns [Boolean] Whether or not the state was set
+  ###*
+   * Mark a user's state
+   * @param  {String}             userId  The id of the user to mark
+   * @param  {WhereaboutsStates}  state   The state to mark the user with
+   * @return {Boolean}                    Whether or not the state was set
   ###
   mark: (userId, state) =>
     unless state.toUpperCase() in Object.keys WhereaboutsStates
@@ -30,16 +34,18 @@ class StateTracker
       user: slack.users[userId].profile # just include the profile
       state: state
     true
-  ###
-  Clear a user's state
-  @param  userId  [string]  The user to clear
+
+  ###*
+   * Resets a user's state
+   * @param  {String} userId  The id of the user to clear
   ###
   clear: (userId) =>
     if @users[userId]?
       delete @users[userId]
-  ###
-  Retrieves all users whose state match the state provided
-  @param state  [string]  The state to check
+
+  ###*
+   * Retrieves all users whose state match the state provided
+   * @param  {WhereaboutsStates} state  The state of users to search for
   ###
   usersForState: (state) =>
     (user for id, user of @users when user.state is state)

@@ -5,13 +5,14 @@ DM              = require './dm'
 {listensTo}     = require '../config'
 {botResponses}  = require '../config'
 
-
-###
-This class resolves questions/responses
+###*
+ * This class resolves questions from the bot and human responses to take
+ * action from those responses
 ###
 class HumanPrompter
-  ###
-  @returns The help text for when help is initiated
+  ###*
+   * Generates a help message string
+   * @return {String} The help text for when help is asked
   ###
   _helpMessage: ->
     formattedListensTo = []
@@ -21,8 +22,9 @@ class HumanPrompter
 
     You can also bypass me (:cry:) by using the `/whereabouts [state]` slash command and set your own whereabouts by yourself."
 
-  ###
-  Responses to pick when talking to whereabouts bot without it asking human a question
+  ###*
+   * Responses to pick when talking to whereabouts bot without it asking human a question
+   * @type {Array}
   ###
   @responses = [
     "Huh?"
@@ -34,6 +36,10 @@ class HumanPrompter
   ]
   @responses = @responses.concat botResponses
 
+  ###*
+   * Constructs a new HumanPrompter and listens to the DM channel initated
+   * between all users and the bot
+  ###
   constructor: ->
     @users = {}
     slack.on 'message', (message) =>
@@ -43,10 +49,10 @@ class HumanPrompter
       if hasSetup
         @pingHelp message.user
 
-  ###
-  Sets up a prompter for a user
-  @param userId [string]  The user to setup for
-  @returns whether or not it was set up
+  ###*
+   * Sets up a handler and prompter for the provided user
+   * @param  {String} userId The id of the user to set up for
+   * @return {Boolean}       Whether or not it was set up
   ###
   _setupUser: (userId) =>
     unless @users[userId]?
@@ -58,12 +64,12 @@ class HumanPrompter
         @_parseMessage message, userId
     hadToSetup?
 
-  ###
-  Ask a question to a particular human
-  @param questionText [string] The question text
-  @param userId [string] Who to ask question to
-  @param range [RegEx] A regex that is to be tested on matching the string
-  @returns A promise to the deferred response
+  ###*
+   * Asks a question to a particular human in the DM channel
+   * @param  {String} questionText      The question to ask
+   * @param  {String} userId            The id of the user to ask this question to
+   * @param  {RegularExpression} range  A regex that is to be tested on matching the string
+   * @return {Promise}                  A promise to the deferred response
   ###
   ask: (questionText, userId, range) =>
     # Setup user if not setup before
@@ -79,46 +85,43 @@ class HumanPrompter
     @_sendMessage questionText, userId
     return @users[userId].lastQuestion.deferred.promise
 
-  ###
-  Sends a message to the user from the bot (public method)
-  @param  messageText [string]  text to send
-  @param  userId  [string]  who to send the message to
+  ###*
+   * Sends a message to the user from the bot
+   * @param  {String} messageText The text to send
+   * @param  {String} userId      The id of the user to send the message to
   ###
   message: (messageText, userId) =>
     # Setup user if not setup before
     @_setupUser userId
-    @_sendMessage messageText, userId
-
-  ###
-  Sends a message to the user from the bot
-  @param  messageText [string]  text to send
-  @param  userId  [string]  who to send the message to
-  ###
-  _sendMessage: (messageText, userId) =>
     @users[userId].dm.sendMessage messageText
 
-  ###
-  Give up question
-  @param userId [string] Who to give up on
+  ###*
+   * Sends a give up asking question message to the given user
+   * @param  {String} userId The id of the user to send the message to
   ###
   _giveUpAsking: (userId) =>
-    @_sendMessage "Fine, don't answer me :pensive: :broken_heart:", userId
+    @message "Fine, don't answer me :pensive: :broken_heart:", userId
     clearTimeout @users[userId].lastQuestion.timeout
     # reject the promise
     @users[userId].lastQuestion.deferred.reject()
     @users[userId].lastQuestion = undefined
 
-  ###
-  Pings the user with the help text
-  @param userId [string] The user to ping
+  ###*
+   * Pings the user with the help text
+   * @param  {String} userId The id of the user to send the message to
   ###
   pingHelp: (userId) =>
     @message @_helpMessage(), userId
 
   ###
-  Parse a message for a suitable human response
+
   @param message [object] The message to check
   @param userId [string] Who to parse from
+  ###
+  ###*
+   * Parse a message for a suitable human response
+   * @param  {Object} message The message object to check
+   * @param  {String} userId  Who to parse the message from
   ###
   _parseMessage: (message, userId) =>
     return if message.user isnt userId

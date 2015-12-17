@@ -3,17 +3,20 @@ WhereaboutsStates = require './whereabouts-states'
 HumanPrompter     = require './human-prompter'
 StateTracker      = require './state-tracker'
 
-###
-This class parses text from the whereabouts channel
+###*
+ * This class is responsible for listening to a whereabouts channel
+ * and parse activity in it
 ###
 class WhereaboutsChannelParser
-  ###
-  @param listeningTo  The channel name the parser listens to
+  ###*
+   * Construct a new channel parser
+   * @param  {String} listeningTo The channel name the parser listens to
   ###
   constructor: (listeningTo) ->
     @channel = (channel for id, channel of slack.channels when channel.name is listeningTo and channel.is_member)[0]
     unless @channel?
       throw new Error "#{slack.self.name} is not a member of #{listeningTo} or #{listeningTo} could not be found. Please be sure you invite the bot by entering '@#{slack.self.name}' into \##{listeningTo}."
+
   ###
   The variant states for outstanding whereabouts
   ###
@@ -23,8 +26,10 @@ class WhereaboutsChannelParser
   OFFSITE         = WhereaboutsStates.OFFSITE
   OUT_OF_OFFICE   = WhereaboutsStates.OUT_OF_OFFICE
 
-  ###
-  Keywords detected for
+  ###*
+   * An object of specific keywords to listen to mapped to their representivie
+   * state
+   * @type {Object}
   ###
   @WhereaboutsKeywords:
     # running late
@@ -51,8 +56,9 @@ class WhereaboutsChannelParser
     'heading out':  OUT_OF_OFFICE
     'out':          OUT_OF_OFFICE
 
-  ###
-  Actions for DM responses
+  ###*
+   * Maps actions to their relative responses
+   * @type {Object}
   ###
   @WhereaboutsPrompterForState: {}
 
@@ -104,10 +110,10 @@ class WhereaboutsChannelParser
         sendThanks(userId)
       negative:    sendOkay
 
-  ###
-  Parses messages, returning the state for a matched keyword
-  @param text Text to parse
-  @returns The state of a matched keyword
+  ###*
+   * Parses messages, returning the state for a matched keyword
+   * @param  {String} text            The text to parse
+   * @return {WhereaboutsStates}      The state of a matched keyword
   ###
   parseMessage: (text) =>
     if text?
@@ -115,9 +121,9 @@ class WhereaboutsChannelParser
       for keyword, state of WhereaboutsChannelParser.WhereaboutsKeywords
         return state if text.indexOf(keyword) > -1
 
-  ###
-  Listening events for handling new messages
-  @param message  The incoming message
+  ###*
+   * Event handler for when a new message is received
+   * @param  {Object} message Message that was received
   ###
   onMessage: (message) =>
     state = @parseMessage message.text if message.channel is @channel.id

@@ -1,5 +1,5 @@
-###
-This class centralises whereabouts states
+###*
+ * This class keeps houses each whereabouts state
 ###
 class WhereaboutsStates
   @RUNNING_LATE: 'running_late'

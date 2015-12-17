@@ -2,12 +2,13 @@ slack           = require '../slack'
 Q               = require 'q'
 {EventEmitter}  = require 'events'
 
-###
-This class is a simple wrapper around the slack DM
+###*
+ * This class is a simple wrapper around the slack DM
 ###
 class DM extends EventEmitter
-  ###
-  @param userId [string] The id of the person to DM to
+  ###*
+   * Constructs a new DM between the bot and the specified user
+   * @param  {String} userId The user id to DM to
   ###
   constructor: (userId) ->
     @user = slack.users[userId]
@@ -20,9 +21,10 @@ class DM extends EventEmitter
       # Grab the DM channel
       if message.getChannelType() is "DM" and message.user is userId
         @emit 'dmMessage', message
-  ###
-  Prompt a message in the DM
-  @param message [string] The message to prompt
+
+  ###*
+   * Send a message to the user in the DM channel between them
+   * @param  {String} message The message to send
   ###
   sendMessage: (message) =>
     # Load the DM channel from slack DMs if there
