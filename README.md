@@ -63,7 +63,6 @@ Place a `config.json` under the `res` directory. Here is a sample config:
 ## TODO
 
 - Add a contributing section to the README
-- Use `throw new Error` instead of `throw Error` and try and specify the error type
 - Allow bot to be DM'ed and ask questions and give statements like:
   - Who is working from home today?
   - Who is sick?
@@ -74,10 +73,8 @@ Place a `config.json` under the `res` directory. Here is a sample config:
   - I'll be out of office at 5pm
   - I'm going home at 4pm
   - I'll be leaving early for an appointment this afternoon
-- Let the bot introduce himself to new users?
-- If the bot is not in a channel, let it try and add itself to that channel rather than crashing
 - Better API
-- Switch to using Redis for keeping track of states instead of just in memory
+- Switch to using Redis for keeping track of states and DMs instead of just in memory
 - RSS feeds of people's states
 - Improve the way to handle config files, e.g.:
   - Default to use arguments:
