@@ -11,9 +11,13 @@ or to display each of your team member's states on a dashboard such as [Dashing]
 
 ## Table of Contents
 
-1. States
-2. Getting Started
-3. Usage
+1. [States](#states)
+2. [Getting Started](#getting-started)
+  - [Arguments](#arguments)
+3. [API](#api)
+4. [Things to do](#todo)
+5. [Contributing](#contributing)
+6. [License](#license)
 
 ## States
 
@@ -88,6 +92,8 @@ URL-encoded body with the following parameters:
 
 ## TODO
 
+Feel like contributing?
+
 - Allow bot to be DM'ed and ask questions and give statements like:
   - Who is working from home today?
   - Who is sick?
@@ -116,6 +122,6 @@ To extend the code base, use the following steps:
 3. commit your changes. A good guide to commit messages can be found [here](http://chris.beams.io/posts/git-commit/),
 4. and create a pull request.
 
-# Licence
+# License
 
 Copyright © 2015 Alex Cummaudo. Licensed under [Apache License v2.0](http://www.apache.org/licenses/LICENSE-2.0).
