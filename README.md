@@ -104,3 +104,18 @@ URL-encoded body with the following parameters:
 - Better `auth-token` handling?
 - Add slash commands out-of-the-box
 - Wrap it up into a [Slack app](https://slack.com/apps)?
+
+# Contributing
+
+Have an idea to extend this project or discover a bug? Feel free to contribute or raise an issue!
+
+To extend the code base, use the following steps:
+
+1. Fork this repo,
+2. checkout a new feature or fix branch: `feature/<my-feature-name>`, `fix/<issue>` etc.,
+3. commit your changes. A good guide to commit messages can be found [here](http://chris.beams.io/posts/git-commit/),
+4. and create a pull request.
+
+# Licence
+
+Copyright © 2015 Alex Cummaudo. Licensed under [Apache License v2.0](http://www.apache.org/licenses/LICENSE-2.0).

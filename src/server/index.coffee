@@ -20,7 +20,7 @@ OUT_OF_OFFICE   = WhereaboutsStates.OUT_OF_OFFICE
 app.use bodyParser.urlencoded { extended: true }
 
 ###
-GET /states/
+GET /states
 Retrieves each user for each state
 ###
 app.get '/states/', (req, res) ->
@@ -30,7 +30,7 @@ app.get '/states/', (req, res) ->
   res.send stateInfo
 
 ###
-POST /state/
+POST /state
 Update a state for a user
 ###
 app.post '/states/', (req, res) ->
