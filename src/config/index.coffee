@@ -52,7 +52,7 @@ else
     unless confVar.required
       config[confKey] = confVar.default
     if config[confKey] is null
-      throw new Error "No value specified specified for required argument #{confVar.argv} or #{confVar.env} not specified in enviornment"
+      throw new Error "No value specified specified for required argument #{confVar.argv} or #{confVar.env} not specified as an environment variable"
     if confKey is 'listensTo'
       config[confKey] = config[confKey].split(',')
 
