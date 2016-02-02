@@ -9,7 +9,9 @@
     "cron": "^1.0.9",
     "express": "^4.13.0",
     "pad": "^1.0.0",
+    "promise-redis": "0.0.5",
     "q": "1.4.1",
+    "redis": "^2.4.2",
     "slack-client": "1.4.1",
     "underscore": "1.7.0"
   },

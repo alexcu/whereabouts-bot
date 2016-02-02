@@ -37,6 +37,18 @@ expectedConfig =
     env:      'WHEREABOUTS_BOT_LISTEN_TO'
     describe: 'Comma-separated list of the channels the bot should listen to'
     required: yes
+  redisPort:
+    argv:     'redis-port'
+    env:      'WHEREABOUTS_BOT_REDIS_PORT'
+    describe: 'Custom redis port for whereabouts bot to connect to'
+    default:  6379
+    required: no
+  redisHost:
+    argv:     'redis-host'
+    env:      'WHEREABOUTS_BOT_REDIS_HOST'
+    describe: 'Custom redis host for whereabouts bot to connect to'
+    default:  '127.0.0.1'
+    required: no
 
 # Just getting help?
 if argv.help or argv.h

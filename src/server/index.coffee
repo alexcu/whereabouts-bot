@@ -7,6 +7,7 @@ bodyParser         = require 'body-parser'
 StateTracker       = require '../classes/state-tracker'
 HumanPrompter      = require '../classes/human-prompter'
 WhereaboutsStates  = require '../classes/whereabouts-states'
+Q                  = require 'q'
 
 ###
 The variant states for outstanding whereabouts
@@ -25,9 +26,13 @@ Retrieves each user for each state
 ###
 app.get '/states', (req, res) ->
   stateInfo = {}
-  for _, state of WhereaboutsStates
-    stateInfo[state] = StateTracker.usersForState state
-  res.send stateInfo
+  promises = (StateTracker.usersForState state for _, state of WhereaboutsStates)
+  Q.all(promises).then (userStates) ->
+    for userIds, idx in userStates
+      key = Object.keys(WhereaboutsStates)[idx]
+      state = WhereaboutsStates[key]
+      stateInfo[state] = (slack.users[userId].profile for userId in userIds)
+    res.send stateInfo
 
 ###
 POST /states
