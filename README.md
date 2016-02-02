@@ -31,7 +31,10 @@ The following whereabouts states are supported:
 
 ## Getting Started
 
-To start the bot, install dependencies and start:
+Whereabouts bot relies on [Redis](http://redis.io/). Please ensure Redis is [installed](http://redis.io/topics/quickstart)
+on your system.
+
+To start the bot, install npm dependencies and start:
 
 ```bash
 $ npm install
@@ -67,6 +70,12 @@ integration, use the token acquired when creating the integration.
 
 #### `--listen-to` or `WHEREABOUTS_BOT_LISTEN_TO`
 A comma-separated list of the channels the bot should listen to.
+
+#### `--redis-host` or `WHEREABOUTS_BOT_REDIS_HOST`
+Custom host for Redis server. Defaults to **localhost**.
+
+#### `--redis-port` or `WHEREABOUTS_BOT_REDIS_PORT`
+Custom port for Redis server. Defaults to the Redis standard **port 6379**.
 
 ## Slack slash commands usage
 
@@ -105,7 +114,6 @@ Feel like contributing?
   - I'm going home at 4pm
   - I'll be leaving early for an appointment this afternoon
 - Better API (json and url-encoded)
-- Switch to using Redis for keeping track of states and DMs instead of just in memory
 - RSS feeds of people's states
 - Better `auth-token` handling?
 - Add slash commands out-of-the-box
