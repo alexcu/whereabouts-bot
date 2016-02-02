@@ -23,17 +23,17 @@ app.use bodyParser.urlencoded { extended: true }
 GET /states
 Retrieves each user for each state
 ###
-app.get '/states/', (req, res) ->
+app.get '/states', (req, res) ->
   stateInfo = {}
   for _, state of WhereaboutsStates
     stateInfo[state] = StateTracker.usersForState state
   res.send stateInfo
 
 ###
-POST /state
+POST /states
 Update a state for a user
 ###
-app.post '/states/', (req, res) ->
+app.post '/states', (req, res) ->
   unless req.body.token is authToken
     return res.status(400).send("Invalid auth token provided")
   userId = req.body.user_id

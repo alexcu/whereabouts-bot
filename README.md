@@ -78,11 +78,11 @@ existing `whereabouts` state.
 
 ## API
 
-### `GET /states`
+### GET /states
 
 Use this endpoint of retrieve the latest states of all members in your Slack team.
 
-### `POST /state`
+### POST /states
 
 Use this endpoint to update the state of a specific team member. Provide a
 URL-encoded body with the following parameters:
