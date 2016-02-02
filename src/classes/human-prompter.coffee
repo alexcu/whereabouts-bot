@@ -113,11 +113,6 @@ class HumanPrompter
   pingHelp: (userId) =>
     @message @_helpMessage(), userId
 
-  ###
-
-  @param message [object] The message to check
-  @param userId [string] Who to parse from
-  ###
   ###*
    * Parse a message for a suitable human response
    * @param  {Object} message The message object to check
