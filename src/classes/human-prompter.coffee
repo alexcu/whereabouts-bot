@@ -82,7 +82,7 @@ class HumanPrompter
       timeout: setTimeout (=> @_giveUpAsking(userId)), TWO_HOURS
       deferred: Q.defer()
     # Ask the question
-    @_sendMessage questionText, userId
+    @message questionText, userId
     return @users[userId].lastQuestion.deferred.promise
 
   ###*
@@ -125,7 +125,7 @@ class HumanPrompter
     questionObj = @users[userId].lastQuestion
     # talking to bot without a question asked?
     unless questionObj?
-      return @_sendMessage _.sample(HumanPrompter.responses), userId
+      return @message _.sample(HumanPrompter.responses), userId
     matches = questionObj.expectedResponses.exec messageText
     if matches? and matches.length > 0
       # resolve the promise with the first match
@@ -135,8 +135,8 @@ class HumanPrompter
       @users[userId].lastQuestion = undefined
     else
       # unexpected response
-      @_sendMessage "Sorry I don't understand. Answer with one of `#{questionObj.expectedResponses}`.", userId
-      @_sendMessage questionObj.question, userId
+      @message "Sorry I don't understand. Answer with one of `#{questionObj.expectedResponses}`.", userId
+      @message questionObj.question, userId
 
 # Singleton parser
 module.exports = new HumanPrompter()
